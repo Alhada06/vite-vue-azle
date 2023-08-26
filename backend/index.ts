@@ -1,26 +1,68 @@
-import { $query, $update, nat } from 'azle';
+import { $query, $update, Opt, Principal, Vec, nat, ic } from 'azle';
+import {
+  insertUser,
+  getById,
+  allUsers,
+  constainsId,
+  User,
+} from './user_accounts';
 
 // This is a global variable that is stored on the heap
-let counter : nat = BigInt(0);
-
+let counter: nat = BigInt(0);
+$query;
+export function caller(): Principal {
+  return ic.caller();
+}
 // Query calls complete quickly because they do not go through consensus
 $query;
 export function get(): nat {
-    return counter;
+  return counter;
 }
 
 // Update calls take a few seconds to complete
 // This is because they persist state changes and go through consensus
 $update;
-export function add(n : nat): nat {
-    counter += n; //
-    return counter;
+export function add(n: nat): nat {
+  counter += n; //
+  return counter;
 }
-
 
 $update;
 export function inc(): nat {
-    counter += BigInt(1);
-    return counter
+  counter += BigInt(1);
+  return counter;
 }
 
+$query;
+export function getUserById(id: Principal): Opt<User> {
+  return getById(id);
+}
+
+$query;
+export function getAllUsers(): Vec<User> {
+  return allUsers();
+}
+
+$update;
+export function createUser(username: string, id: Principal): Opt<User> {
+  return insertUser(username, id);
+}
+$query;
+export function isRegistered(id: Principal): boolean {
+  return constainsId(id);
+}
+
+$update;
+export function updateMyProfile(username: string): Opt<User> {
+  return createUser(username, caller());
+}
+$query;
+
+export function callerIsRegistered(): boolean {
+  return isRegistered(caller());
+}
+$query;
+
+export function callerProfile(): Opt<User> {
+  return getUserById(caller());
+}

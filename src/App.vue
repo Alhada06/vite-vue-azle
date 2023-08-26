@@ -2,8 +2,10 @@
 import './App.css';
 import { RouterLink, RouterView } from 'vue-router';
 import Counter from './components/Counter.vue';
+import AppAlerts from './components/AppAlerts.vue';
 import { useAuthStore } from './stores/auth';
 import { storeToRefs } from 'pinia';
+import Navbar from './components/Navbar.vue';
 const authStore = useAuthStore();
 const { isReady } = storeToRefs(authStore);
 if (isReady.value === false) {
@@ -12,18 +14,9 @@ if (isReady.value === false) {
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <Counter />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
+  <Navbar></Navbar>
   <RouterView />
+  <AppAlerts />
 </template>
 
 <style scoped>

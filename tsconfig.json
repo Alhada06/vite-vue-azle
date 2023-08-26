@@ -9,7 +9,7 @@
     /* Bundler mode */
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
 
     /* Linting */
     "strict": false,

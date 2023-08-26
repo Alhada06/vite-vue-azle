@@ -1,5 +1,18 @@
+type User = record { id : principal; username : text };
 service : () -> {
   add : (nat) -> (nat);
+  allUsers : () -> (vec User) query;
+  caller : () -> (principal) query;
+  callerIsRegistered : () -> (bool) query;
+  callerProfile : () -> (opt User) query;
+  constainsId : (principal) -> (bool) query;
+  createUser : (text, principal) -> (opt User);
   get : () -> (nat) query;
+  getAllUsers : () -> (vec User) query;
+  getById : (principal) -> (opt User) query;
+  getUserById : (principal) -> (opt User) query;
   inc : () -> (nat);
+  insertUser : (text, principal) -> (opt User);
+  isRegistered : (principal) -> (bool) query;
+  updateMyProfile : (text) -> (opt User);
 }

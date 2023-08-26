@@ -5,6 +5,7 @@ import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
 import Components from 'unplugin-vue-components/vite';
 import AutoImport from 'unplugin-auto-import/vite';
+import Icons from 'unplugin-icons/vite';
 dotenv.config();
 
 export default defineConfig({
@@ -50,24 +51,8 @@ export default defineConfig({
         // presets
         'vue',
         'vue-router',
-        // custom
-        {
-          '@vueuse/core': [
-            // named imports
-            'useMouse', // import { useMouse } from '@vueuse/core',
-            // alias
-            ['useFetch', 'useMyFetch'], // import { useFetch as useMyFetch } from '@vueuse/core',
-          ],
-          axios: [
-            // default imports
-            ['default', 'axios'], // import { default as axios } from 'axios',
-          ],
-          '[package-name]': [
-            '[import-names]',
-            // alias
-            ['[from]', '[alias]'],
-          ],
-        },
+        '@vueuse/core',
+
         // example type import
         {
           from: 'vue-router',
@@ -82,8 +67,8 @@ export default defineConfig({
       // by default it only scan one level of modules under the directory
       dirs: [
         // './hooks',
-        // './composables' // only root modules
-        // './composables/**', // all nested modules
+        './composables', // only root modules
+        './composables/**', // all nested modules
         // ...
       ],
 
@@ -113,6 +98,7 @@ export default defineConfig({
         globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
       },
     }),
+    Icons({ compiler: 'vue3' }),
   ],
   test: {
     environment: 'jsdom',
