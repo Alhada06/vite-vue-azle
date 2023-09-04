@@ -1,4 +1,15 @@
-import { $query, $update, Opt, Principal, Vec, nat, ic } from 'azle';
+import {
+  $query,
+  $update,
+  Opt,
+  Principal,
+  Vec,
+  nat,
+  ic,
+  Variant,
+  Result,
+  nat64,
+} from 'azle';
 import {
   insertUser,
   getById,
@@ -6,7 +17,15 @@ import {
   constainsId,
   User,
 } from './user_accounts';
+import { icrc1_balance_of, icrc1_transfer } from './ledger';
+import {
+  ICRC1Account,
+  ICRC1TransferArgs,
+  ICRC1TransferError,
+} from 'azle/canisters/icrc/icrc_1';
+import { Address, Tokens, TransferResult } from 'azle/canisters/ledger';
 
+export { icrc1_balance_of, icrc1_transfer } from './ledger';
 // This is a global variable that is stored on the heap
 let counter: nat = BigInt(0);
 $query;
@@ -66,3 +85,26 @@ $query;
 export function callerProfile(): Opt<User> {
   return getUserById(caller());
 }
+
+// $query;
+// export async function callerBalance(
+//   account: Principal,
+// ): Promise<Result<Tokens, string>> {
+//   return await getAccountBalance(getAddressFromPrincipal(account));
+// }
+
+// $update;
+
+// export async function transferTokens(
+//   to: Principal,
+//   amount: nat64,
+//   fee: nat64,
+//   createdAtTime: Opt<nat64>,
+// ): Promise<Result<TransferResult, string>> {
+//   return await executeTransfer(
+//     getAddressFromPrincipal(to),
+//     amount,
+//     fee,
+//     createdAtTime,
+//   );
+// }

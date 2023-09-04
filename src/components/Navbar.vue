@@ -1,16 +1,34 @@
 <script setup lang="ts">
 import MdiAccountCircleOutline from '~icons/mdi/account-circle-outline';
+import MdiAccountCogOutline from '~icons/mdi/account-cog-outline';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../stores/auth';
 
 const authStore = useAuthStore();
-const { isReady, identity, isAuthenticated } = storeToRefs(authStore);
+const {
+  isReady,
+  isRegistered,
+  isAuthenticated,
+  user,
+  userActor,
+  balance,
+  identity,
+} = storeToRefs(authStore);
+
+const userObj = computed(() => (user.value != null ? user.value[0] : null));
+const test = () => {
+  console.log(balance.value);
+  console.log(identity.value.getPrincipal().toString());
+};
 </script>
 
 <template>
   <div class="navbar bg-base-300 top-0 fixed">
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
+      <!-- <a class="btn btn-ghost normal-case text-xl">daisyUI</a> -->
+      <router-link class="btn btn-ghost normal-case text-xl" to="/"
+        >daisyUI</router-link
+      >
     </div>
     <div class="flex-none">
       <div class="dropdown dropdown-end">
@@ -41,7 +59,9 @@ const { isReady, identity, isAuthenticated } = storeToRefs(authStore);
             <span class="font-bold text-lg">8 Items</span>
             <span class="text-info">Subtotal: $999</span>
             <div class="card-actions">
-              <button class="btn btn-primary btn-block">View cart</button>
+              <button @click="test" class="btn btn-primary btn-block">
+                View cart
+              </button>
             </div>
           </div>
         </div>
@@ -57,12 +77,12 @@ const { isReady, identity, isAuthenticated } = storeToRefs(authStore);
           tabindex="0"
           class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52"
         >
-          <li>Hello {{ authStore?.user[0]?.username }}</li>
+          <li v-if="userObj">Hello {{ userObj.username }}</li>
           <li>
-            <a class="justify-between">
+            <router-link to="/profile" class="justify-between">
               Profile
-              <span class="badge">New</span>
-            </a>
+              <span><MdiAccountCogOutline /></span>
+            </router-link>
           </li>
 
           <li @click="authStore.logout"><a>Logout</a></li>

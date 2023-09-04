@@ -6,7 +6,9 @@
       "root": "src",
       "ts": "backend/index.ts",
       "candid": "backend/index.did",
-      "wasm": ".azle/backend/backend.wasm.gz"
+      "wasm": ".azle/backend/backend.wasm.gz",
+      "env": ["CANISTER_ID_ICRC1_LEDGER"],
+      "opt_level": "1"
     },
     "frontend": {
       "dependencies": ["backend"],
@@ -24,6 +26,11 @@
           "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
         }
       }
+    },
+    "icrc1-ledger": {
+      "type": "custom",
+      "wasm": "icrc1-ledger.wasm",
+      "candid": "icrc1-ledger.did"
     }
   },
   "defaults": {
@@ -31,6 +38,7 @@
       "packtool": "npm run --silent sources"
     }
   },
+
   "output_env_file": ".env",
   "version": 2
 }

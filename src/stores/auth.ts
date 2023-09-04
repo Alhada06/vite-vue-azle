@@ -1,7 +1,11 @@
-import { User } from './../declarations/backend/backend.did.d';
+import { ICRC1Account, User } from './../declarations/backend/backend.did.d';
 import { defineStore } from 'pinia';
 import { AuthClient } from '@dfinity/auth-client';
-import { createActor, canisterId } from '../declarations/backend';
+import {
+  createActor,
+  canisterId,
+  backend,
+} from '../declarations/backend/index';
 import { toRaw } from 'vue';
 import { Identity, Actor } from '@dfinity/agent';
 import { useAlerts } from './useAlerts';
@@ -45,6 +49,7 @@ export type RootState = {
   identity: Identity | null;
   userActor: Actor | null;
   user: User | null;
+  balance: Number | null;
 };
 
 export const useAuthStore = defineStore('auth', {
@@ -56,21 +61,44 @@ export const useAuthStore = defineStore('auth', {
       authClient: null,
       identity: null,
       userActor: null,
-      user: null,
+      user: useLocalStorage('appUser', null, {
+        serializer: StorageSerializers.object,
+      }),
+      balance: 0,
     };
   },
   actions: {
     async init() {
+      console.log('1');
       const authClient = await AuthClient.create(defaultOptions.createOptions);
       this.authClient = authClient;
+      console.log('2');
       const isAuthenticated = await authClient.isAuthenticated();
+      console.log('3');
       const identity = isAuthenticated ? authClient.getIdentity() : null;
+      console.log('4');
       const bActor = identity ? actorFromIdentity(identity) : null;
+      console.log('5');
+      this.isAuthenticated = isAuthenticated;
       this.identity = identity;
       this.userActor = bActor;
-      this.isRegistered = bActor ? await bActor.callerIsRegistered() : false;
-
-      this.user = this.isRegistered ? await bActor.callerProfile() : null;
+      const isRegistered = bActor ? await bActor.callerIsRegistered() : false;
+      this.isRegistered = isRegistered;
+      console.log('6');
+      console.log('end');
+      console.log(this.isRegistered);
+      console.log(isRegistered);
+      this.user =
+        isAuthenticated && isRegistered ? await bActor.callerProfile() : null;
+      console.log(this.user);
+      let acc: ICRC1Account = {
+        owner: identity.getPrincipal(),
+        subaccount: [],
+      };
+      this.balance =
+        isAuthenticated && isRegistered
+          ? await backend.icrc1_balance_of(acc)
+          : 0;
       this.isReady = true;
     },
     async login() {
@@ -82,6 +110,7 @@ export const useAuthStore = defineStore('auth', {
           const isAuthenticated = await authClient.isAuthenticated();
           const identity = isAuthenticated ? authClient.getIdentity() : null;
           const bActor = identity ? actorFromIdentity(identity) : null;
+          this.isAuthenticated = isAuthenticated;
           this.identity = identity;
           this.userActor = bActor;
           this.isRegistered = bActor
@@ -91,10 +120,15 @@ export const useAuthStore = defineStore('auth', {
           alertsStore.success('You are logged in!');
 
           if (this.isRegistered) {
-            this.user = this.isRegistered ? await bActor.callerProfile() : null;
+            this.user = await bActor.callerProfile();
+            let acc: ICRC1Account = {
+              owner: identity.getPrincipal(),
+              subaccount: [],
+            };
+            this.balance = await backend.icrc1_balance_of(acc);
             return this.$router.push('/');
           }
-          return this.$router.push('/profile');
+          return this.$router.push('/register');
         },
       });
     },
@@ -108,6 +142,9 @@ export const useAuthStore = defineStore('auth', {
       this.isRegistered = false;
       this.user = null;
       alertsStore.info('Successfully logged out!');
+    },
+    setUser(user: Array<User>) {
+      this.user = user[0];
     },
   },
 });

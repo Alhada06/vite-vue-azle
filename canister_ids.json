@@ -1,0 +1,11 @@
+{
+  "backend": {
+    "ic": "fbp73-6iaaa-aaaap-abi5a-cai"
+  },
+  "frontend": {
+    "ic": "fgozp-tqaaa-aaaap-abi5q-cai"
+  },
+  "icrc1-ledger": {
+    "ic": "fimuh-iaaaa-aaaap-abi4q-cai"
+  }
+}

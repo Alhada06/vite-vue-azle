@@ -15,7 +15,15 @@ if (isReady.value === false) {
 
 <template>
   <Navbar></Navbar>
-  <RouterView />
+  <div class="mt-10 h-screen w-full overflow-y-auto px-4">
+    <div class="mt-10 h-[90%] scroll-pt-16">
+      <!-- <div class="col-span-10 col-start-2"> -->
+      <RouterView />
+
+      <!-- </div> -->
+    </div>
+  </div>
+
   <AppAlerts />
 </template>
 

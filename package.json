@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "setup": "npm i && dfx canister create backend && dfx generate backend && dfx deploy",
+    "setup": "npm i && dfx canister create backend && run-p setup:ledger && dfx generate backend && dfx deploy ",
+    "setup:ledger": "./ledger_local.sh",
     "start": "run-p frontend",
     "frontend": "vite --port 3000",
     "backend": "dfx deploy backend",
@@ -24,6 +25,8 @@
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.54",
+    "@iconify-json/svg-spinners": "^1.1.2",
+    "@tailwindcss/typography": "^0.5.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.14",
