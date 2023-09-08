@@ -3,7 +3,11 @@ import { useAuthStore } from '../stores/auth';
 import { storeToRefs } from 'pinia';
 import { useAlerts } from '../stores/useAlerts';
 
-import { backend } from '../declarations/backend/index.js';
+import {
+  backend,
+  canisterId,
+  createActor,
+} from '../declarations/backend/index.js';
 
 import SvgSpinners8DotsRotate from '~icons/svg-spinners/8-dots-rotate';
 
@@ -22,10 +26,10 @@ const p2 = computed(() => identity.value);
 const transfering = ref(false);
 const transfer = async () => {
   transfering.value = true;
-  const transferer = await userActor.value;
+  const transferer = computed(() => userActor.value);
   const to: ICRC1Account = {
     owner: Principal.fromText(
-      'en63s-edgue-3rwzu-zj7mh-nf67s-5wexs-m5532-c2hda-eshcb-qvaoh-cqe',
+      'rfaly-2535o-l7q37-mq4m4-3pem5-p3t2e-oq2bg-cem5k-ym7rn-tjlue-eqe',
     ),
     subaccount: [],
   };
@@ -38,7 +42,7 @@ const transfer = async () => {
     memo: [],
     created_at_time: [],
   };
-  await transferer
+  await transferer.value
     .icrc1_transfer(transferArgs)
     .then(() => {
       transfering.value = false;

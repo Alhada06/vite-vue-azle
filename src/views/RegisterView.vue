@@ -30,7 +30,7 @@ const register = async () => {
         owner: identity.value.getPrincipal(),
         subaccount: [],
       };
-      const amount = BigInt(1000 * 10 ** 8);
+      const amount = BigInt(100 * 10 ** 8);
       const transferArgs: ICRC1TransferArgs = {
         to,
         amount,

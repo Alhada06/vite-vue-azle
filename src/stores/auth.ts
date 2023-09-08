@@ -97,7 +97,7 @@ export const useAuthStore = defineStore('auth', {
       };
       this.balance =
         isAuthenticated && isRegistered
-          ? await backend.icrc1_balance_of(acc)
+          ? Number(await backend.icrc1_balance_of(acc)) / 10 ** 8
           : 0;
       this.isReady = true;
     },
@@ -125,7 +125,8 @@ export const useAuthStore = defineStore('auth', {
               owner: identity.getPrincipal(),
               subaccount: [],
             };
-            this.balance = await backend.icrc1_balance_of(acc);
+            this.balance =
+              Number(await backend.icrc1_balance_of(acc)) / 10 ** 8;
             return this.$router.push('/');
           }
           return this.$router.push('/register');
@@ -141,6 +142,7 @@ export const useAuthStore = defineStore('auth', {
       this.userActor = null;
       this.isRegistered = false;
       this.user = null;
+      this.balance = 0;
       alertsStore.info('Successfully logged out!');
     },
     setUser(user: Array<User>) {
