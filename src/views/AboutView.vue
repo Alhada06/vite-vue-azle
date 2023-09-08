@@ -15,6 +15,7 @@ import { ic, Principal } from 'azle';
 import {
   ICRC1Account,
   ICRC1TransferArgs,
+  ICRC2TransferFromArgs,
 } from '../declarations/backend/backend.did';
 const authStore = useAuthStore();
 const { identity, user, userActor } = storeToRefs(authStore);
@@ -29,20 +30,21 @@ const transfer = async () => {
   const transferer = computed(() => userActor.value);
   const to: ICRC1Account = {
     owner: Principal.fromText(
-      'rfaly-2535o-l7q37-mq4m4-3pem5-p3t2e-oq2bg-cem5k-ym7rn-tjlue-eqe',
+      'v3a2l-mv5tt-2uoeg-snsbk-gdwqf-j5uzx-mtl7j-6u54y-k725b-l5aje-kqe',
     ),
     subaccount: [],
   };
-  const amount = BigInt(1000 * 10 ** 8);
+
+  const amount = BigInt(100 * 10 ** 8);
   const transferArgs: ICRC1TransferArgs = {
+    from_subaccount: [],
     to,
     amount,
-    from_subaccount: [],
     fee: [],
     memo: [],
     created_at_time: [],
   };
-  await transferer.value
+  await userActor.value
     .icrc1_transfer(transferArgs)
     .then(() => {
       transfering.value = false;

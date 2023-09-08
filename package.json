@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "setup": "npm i && dfx canister create backend && run-p setup:ledger && dfx generate backend && dfx deploy ",
+    "setup:ic": "npm i && dfx canister create backend && run-p setup:ledger_ic && dfx generate backend && dfx deploy  --network ic",
     "setup:ledger": "./ledger_local.sh",
+    "setup:ledger_ic": "./ledger_ic.sh",
     "start": "run-p frontend",
     "frontend": "vite --port 3000",
     "backend": "dfx deploy backend",

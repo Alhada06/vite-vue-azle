@@ -17,15 +17,8 @@ import {
   constainsId,
   User,
 } from './user_accounts';
-import { icrc1_balance_of, icrc1_transfer } from './ledger';
-import {
-  ICRC1Account,
-  ICRC1TransferArgs,
-  ICRC1TransferError,
-} from 'azle/canisters/icrc/icrc_1';
-import { Address, Tokens, TransferResult } from 'azle/canisters/ledger';
 
-export { icrc1_balance_of, icrc1_transfer } from './ledger';
+export { icrc1_balance_of, icrc1_transfer, icrc2_transfer } from './ledger';
 // This is a global variable that is stored on the heap
 let counter: nat = BigInt(0);
 $query;

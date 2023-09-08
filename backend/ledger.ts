@@ -15,6 +15,8 @@ import {
   ICRC,
   ICRC1TransferArgs,
   ICRC1TransferError,
+  ICRC2TransferFromArgs,
+  ICRC2TransferFromError,
   ICRC1Value,
 } from 'azle/canisters/icrc';
 
@@ -46,6 +48,18 @@ export async function icrc1_transfer(
   transferArgs: ICRC1TransferArgs,
 ): Promise<Variant<{ Ok: nat; Err: ICRC1TransferError }>> {
   const result = await icrc.icrc1_transfer(transferArgs).call();
+
+  return match(result, {
+    Ok: (ok) => ok,
+    Err: (err) => ic.trap(err),
+  });
+}
+
+$update;
+export async function icrc2_transfer(
+  transferArgs: ICRC2TransferFromArgs,
+): Promise<Variant<{ Ok: nat; Err: ICRC2TransferFromError }>> {
+  const result = await icrc.icrc2_transfer_from(transferArgs);
 
   return match(result, {
     Ok: (ok) => ok,
